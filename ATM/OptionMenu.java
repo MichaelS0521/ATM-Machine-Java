@@ -1,3 +1,4 @@
+import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.HashMap;
@@ -11,6 +12,18 @@ public class OptionMenu {
 	DecimalFormat moneyFormat = new DecimalFormat("'$'###,##0.00");
 	HashMap<Integer, Account> data = new HashMap<Integer, Account>();
 
+	// Added my Michael.
+	public void loginFile(int customerNum, int pinNumber) {
+		try {
+			FileWriter file = new FileWriter("/Users/michael/Desktop/Projects/ATM-Machine-Java/LoginDate.log");
+			file.write(customerNum + " " + pinNumber + "\n");
+			file.close();
+			Scanner scanner = new Scanner("/Users/michael/Desktop/Projects/ATM-Machine-Java/LoginDate.log");
+		} catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 	public void getLogin() throws IOException {
 		boolean end = false;
 		int customerNumber = 0;
@@ -21,7 +34,22 @@ public class OptionMenu {
 				customerNumber = menuInput.nextInt();
 				System.out.print("\nEnter your PIN number: ");
 				pinNumber = menuInput.nextInt();
+
+				/*
+				Added by Michael
+				 */
+				Account account = new Account();
+				account.setCustomerNumber(customerNumber);
+				account.setPinNumber(pinNumber);
+				Integer userNum = account.getCustomerNumber();
+				int userPinNum = account.getPinNumber();
+				loginFile(userNum, userPinNum);
+				/*
+
+				 */
+
 				Iterator it = data.entrySet().iterator();
+
 				while (it.hasNext()) {
 					Map.Entry pair = (Map.Entry) it.next();
 					Account acc = (Account) pair.getValue();
